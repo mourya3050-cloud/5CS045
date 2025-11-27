@@ -28,8 +28,11 @@ tr:nth-child(even) {
   margin: 4px 2px;
   cursor: pointer;
 }
+
+
 </style>
   <body>
+  
     <h1>List of ALL my games!!!</h1>
     <?php
       // Connect to database
@@ -51,10 +54,14 @@ tr:nth-child(even) {
         <tr>
           <td><a href="game-details.php?id=<?=$a_row['game_id']?>"><?=$a_row['game_name']?></a></td>
           <td><?=$a_row['rating']?></td>
+		  <td><a class="btn btn-outline-danger btn-sm" href="delete-game.php?id=<?=$a_row['game_id']?>" role="button">Delete</a></td>
+		  <td><a class="btn btn-warning btn-sm" href="edit-game-form.php?id=<?=$a_row['game_id']?>">Edit</a></td>
+
          </tr>
 		 
       <?php endwhile;?>
     </table>
 	<a href="add-game-form.php" class="btn btn-primary">Add a game</a>
+	
   </body>
 </html>

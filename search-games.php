@@ -1,11 +1,16 @@
+
+<html>
+<head>
+<body>
 <h1>Search results</h1>
+
 <?php
 
   // Connect to database and run SQL query
   include("db.php");
 
   // Read value from form
-  $keywords = $_POST['keywords'];  
+$keywords = $_POST['keywords'] ?? '';  
 
   // Run SQL query
   $sql = "SELECT * FROM videogames 
@@ -14,6 +19,10 @@
           
   $results = mysqli_query($mysqli, $sql);
 ?>
+   <form action="search-games.php" method="post">
+      <input type="text" name="keywords" placeholder="Search">
+      <input type="submit" value="Go!">
+    </form>
 
 <table>
   <?php while($a_row = mysqli_fetch_assoc($results)):?>
@@ -23,3 +32,6 @@
     </tr>
   <?php endwhile;?>
 </table>
+</body>
+</head>
+</html>
