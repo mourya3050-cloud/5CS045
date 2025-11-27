@@ -21,16 +21,6 @@
         <li class="nav-item">
           <a class="nav-link" href="search-games.php">Search Games</a>
         </li>
-        <!-- Optional dropdown for AJAX features -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="ajaxDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            AJAX Features
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="ajaxDropdown">
-            <li><a class="dropdown-item" href="bootstrap-ajax-dropdown.html">Dropdown Example</a></li>
-            <li><a class="dropdown-item" href="bootstrap-ajax-modal.html">Modal Example</a></li>
-          </ul>
-        </li>
       </ul>
     </div>
   </div>

@@ -1,4 +1,3 @@
-
 <?php
   
   // Read values from the URL

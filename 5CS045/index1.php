@@ -58,7 +58,7 @@ include("navbar.php");
 <script>
 // Hardcoded credentials
 const USERNAME = 'admin';
-const PASSWORD = '1234';
+const PASSWORD = 'SHIV@1234';
 
 function showLogin(){ document.getElementById('login-container').style.display = 'block'; document.getElementById('portal-container').style.display = 'none'; }
 function showPortal(){ document.getElementById('login-container').style.display = 'none'; document.getElementById('portal-container').style.display = 'block'; }

@@ -1,37 +1,66 @@
+<?php
+include("db.php");
 
+// If AJAX request, return ONLY the table rows
+if(isset($_POST['ajax']) && $_POST['ajax'] == 1){
+
+    $keywords = $_POST['keywords'] ?? '';
+
+    $sql = "SELECT * FROM videogames 
+            WHERE game_name LIKE '%{$keywords}%'
+            ORDER BY released_date";
+
+    $results = mysqli_query($mysqli, $sql);
+
+    echo "<table>";
+
+    while($row = mysqli_fetch_assoc($results)) {
+        echo "<tr>";
+        echo "<td><a href='game-details.php?id={$row['game_id']}'>".$row['game_name']."</a></td>";
+        echo "<td>".$row['rating']."</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
+    exit; // Stop the page here for AJAX
+}
+?>
+
+<!DOCTYPE html>
 <html>
 <head>
-<body>
-<h1>Search results</h1>
-
-<?php
-
-  // Connect to database and run SQL query
-  include("db.php");
-
-  // Read value from form
-$keywords = $_POST['keywords'] ?? '';  
-
-  // Run SQL query
-  $sql = "SELECT * FROM videogames 
-          WHERE game_name LIKE '%{$keywords}%' 
-          ORDER BY released_date";
-          
-  $results = mysqli_query($mysqli, $sql);
-?>
-   <form action="search-games.php" method="post">
-      <input type="text" name="keywords" placeholder="Search">
-      <input type="submit" value="Go!">
-    </form>
-
-<table>
-  <?php while($a_row = mysqli_fetch_assoc($results)):?>
-    <tr>
-      <td><a href="game-details.php?id=<?=$a_row['game_id']?>"><?=$a_row['game_name']?></a></td>
-      <td><?=$a_row['rating']?></td>
-    </tr>
-  <?php endwhile;?>
-</table>
-</body>
+    <title>AJAX Game Search</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
+<body>
+
+<h1>Search Results</h1>
+
+<input type="text" id="keywords" placeholder="Search games...">
+<div id="results">Loading...</div>
+
+<script>
+$(document).ready(function(){
+
+    // Load all games initially
+    loadGames("");
+
+    // Function to load results using AJAX
+    function loadGames(query){
+        $.post("search-games.php", { keywords: query, ajax: 1 }, function(data){
+            $("#results").html(data);
+        });
+    }
+
+    // Search as the user types
+    $("#keywords").keyup(function(){
+        let query = $(this).val();
+        loadGames(query);
+    });
+
+});
+</script>
+
+</body>
 </html>
