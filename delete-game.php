@@ -1,5 +1,6 @@
+
 <?php
- 
+  
   // Read values from the URL
   $game_id = $_GET['id'];
   

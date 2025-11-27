@@ -1,5 +1,13 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+
+
 include("db.php");
 include("navbar.php");
 
@@ -87,6 +95,7 @@ document.getElementById("searchBox").addEventListener("keyup", function() {
     .catch(err => console.error('Error fetching search results:', err));
 });
 </script>
+<a href="logout.php">Logout</a>
 
 </body>
 </html>
