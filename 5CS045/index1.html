@@ -1,0 +1,110 @@
+<?php
+include("db.php"); 
+// ❌ Removed navbar.php here (should NOT be before HTML)
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Game Portal</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<?php include("navbar.php"); ?>  <!-- ✅ Correct position -->
+
+<!-- LOGIN FORM -->
+<div id="login-container" class="container mt-5" style="display:none;">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" class="form-control mb-2" required>
+        <input type="password" id="password" placeholder="Password" class="form-control mb-2" required>
+        <div id="login-error" class="text-danger mb-2"></div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+
+<!-- GAME PORTAL -->
+<div id="portal-container" class="container mt-5" style="display:none;">
+    <h1>Welcome to Game Portal</h1>
+
+    <h3>Latest Games</h3>
+    <div class="row mt-3">
+        <?php
+        if (!$mysqli) {
+            echo "<p class='text-danger'>Database connection error.</p>";
+        } else {
+            $sql = "SELECT * FROM videogames ORDER BY released_date DESC";
+            $result = $mysqli->query($sql);
+
+            if ($result && $result->num_rows > 0):
+                while ($game = $result->fetch_assoc()): ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5><?= htmlspecialchars($game['game_name']) ?></h5>
+                                <p><?= htmlspecialchars(substr($game['game_description'], 0, 100)) ?>...</p>
+                            </div>
+                            <div class="card-footer">
+                                Rating: <?= htmlspecialchars($game['rating']) ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile;
+            else: ?>
+                <p>No games added yet.</p>
+            <?php endif;
+        }
+        ?>
+    </div>
+
+    <button id="logoutBtn" class="btn btn-danger mt-4">Logout</button>
+</div>
+
+<script>
+// HARD-CODED CREDENTIALS
+const USERNAME = 'admin';
+const PASSWORD = 'SHIV@1234';
+
+function showLogin() {
+    document.getElementById('login-container').style.display = 'block';
+    document.getElementById('portal-container').style.display = 'none';
+}
+
+function showPortal() {
+    document.getElementById('login-container').style.display = 'none';
+    document.getElementById('portal-container').style.display = 'block';
+}
+
+window.onload = function() {
+    if (sessionStorage.getItem('loggedIn') === 'true') {
+        showPortal();
+    } else {
+        showLogin();
+    }
+};
+
+document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    const errorDiv = document.getElementById('login-error');
+
+    if (user === USERNAME && pass === PASSWORD) {
+        sessionStorage.setItem('loggedIn', 'true');
+        errorDiv.textContent = '';
+        showPortal();
+    } else {
+        errorDiv.textContent = 'Invalid username or password';
+    }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function(){
+    sessionStorage.removeItem('loggedIn');
+    showLogin();
+});
+</script>
+
+</body>
+</html>
